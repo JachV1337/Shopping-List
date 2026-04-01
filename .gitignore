@@ -52,3 +52,33 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# JetBrains Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# MAUI / Xamarin specyficzne
+*.log
+
+# Android
+*.apk
+*.aab
+*.keystore
+
+# iOS / Mac
+*.app
+*.ipa
+*.dSYM/
+
+# Mac system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
