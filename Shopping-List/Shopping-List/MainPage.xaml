@@ -24,19 +24,34 @@
                             <Label Text="{Binding Name}" 
                                    FontSize="16"
                                    VerticalOptions="Center"
-                                   MinimumWidthRequest="150" />
+                                   MinimumWidthRequest="150" 
+                                   >
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="True">
+                                        <Setter Property="TextColor" Value="Green"/>
+                                        <Setter Property="FontAttributes" Value="Bold"/>
+                                        <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                        <Setter Property="FontAttributes" Value="Italic"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsChecked}" Value="False">
+                                        <Setter Property="TextColor" Value="White"/>
+                                        <Setter Property="FontAttributes" Value="None"/>
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
                             <CheckBox IsChecked="{Binding IsChecked}"
                                       VerticalOptions="Center"
-                                      Command="{Binding Source={x:Reference Main}, Path=BindingContext.ToggleItemCheckedCommand}"
-          CommandParameter="{Binding .}"
-                                      />
+                                      Command="{Binding Source={x:Reference Main}, Path=BindingContext.ToggleItemCheckedCommand}" CommandParameter="{Binding .}"/>
                         </HorizontalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
             <VerticalStackLayout VerticalOptions="Center"
                                    HorizontalOptions="Center">
-                <ProgressBar Progress="{Binding CheckedProgress}"  Margin="0,0,0,40" WidthRequest="200" ProgressColor="AliceBlue"></ProgressBar>
+                <HorizontalStackLayout>
+                    <ProgressBar Progress="{Binding CheckedProgress}"  Margin="0,0,0,40" WidthRequest="200" ProgressColor="AliceBlue"></ProgressBar>
+                    <Label Text="{Binding CheckedProgress, StringFormat='{0:P0}'}" FontSize="16" VerticalOptions="Center" Margin="10,0,0,40"></Label>
+                </HorizontalStackLayout>
                 <Button Text="Delete all" Command="{Binding ClearItemsCommand}"></Button>
             </VerticalStackLayout>
         </VerticalStackLayout>

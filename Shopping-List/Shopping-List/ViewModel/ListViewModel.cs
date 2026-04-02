@@ -30,6 +30,7 @@ namespace Shopping_List.ViewModel
         public void ClearItems()
         {
             ShoppingItems.Clear();
+            UpdateCheckedCount();
         }
 
         [RelayCommand]
@@ -38,6 +39,7 @@ namespace Shopping_List.ViewModel
             if (item != null)
             {
                 ShoppingItems.Remove(item);
+                UpdateCheckedCount();
             }
         }
 
@@ -47,6 +49,7 @@ namespace Shopping_List.ViewModel
             if (!string.IsNullOrWhiteSpace(itemName))
             {
                 ShoppingItems.Add(new ShoppingItemModel { Name = itemName, IsChecked = false });
+                UpdateCheckedCount();
             }
         }
         [RelayCommand]

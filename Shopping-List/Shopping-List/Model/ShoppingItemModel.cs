@@ -1,13 +1,15 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Shopping_List.Model
 {
-    public class ShoppingItemModel
+    public partial class ShoppingItemModel : ObservableObject
     {
         public string Name { get; set; }
-        public bool IsChecked { get; set; }
+        [ObservableProperty]
+        private bool isChecked;
 
         public void ToggleChecked()
         {
