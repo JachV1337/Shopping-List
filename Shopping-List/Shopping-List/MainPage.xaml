@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Shopping_List.MainPage">
+             x:Class="Shopping_List.MainPage"
+             x:Name="Main">
 
     <ScrollView>
         <VerticalStackLayout Spacing="20" Padding="20">
@@ -15,22 +16,29 @@
                         <HorizontalStackLayout Spacing="15" 
                                               Padding="10"
                                               HorizontalOptions="Center">
+                            <HorizontalStackLayout.GestureRecognizers>
+                                <SwipeGestureRecognizer Direction="Left"
+                                                        Command="{Binding BindingContext.RemoveItemCommand, Source={x:Reference Name=Main}}" CommandParameter="{Binding .}">
+                                </SwipeGestureRecognizer>
+                            </HorizontalStackLayout.GestureRecognizers>
                             <Label Text="{Binding Name}" 
                                    FontSize="16"
                                    VerticalOptions="Center"
                                    MinimumWidthRequest="150" />
                             <CheckBox IsChecked="{Binding IsChecked}"
                                       VerticalOptions="Center"
-                                      IsEnabled="True"
+                                      Command="{Binding Source={x:Reference Main}, Path=BindingContext.ToggleItemCheckedCommand}"
+          CommandParameter="{Binding .}"
                                       />
                         </HorizontalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <HorizontalStackLayout VerticalOptions="Center"
+            <VerticalStackLayout VerticalOptions="Center"
                                    HorizontalOptions="Center">
-                <Button Text="Delete" Command="{Binding ClearItemsCommand}"></Button>
-            </HorizontalStackLayout>
+                <ProgressBar Progress="{Binding CheckedProgress}"  Margin="0,0,0,40" WidthRequest="200" ProgressColor="AliceBlue"></ProgressBar>
+                <Button Text="Delete all" Command="{Binding ClearItemsCommand}"></Button>
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 

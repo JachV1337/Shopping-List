@@ -13,9 +13,12 @@
             x:Name="ProductName"
             Placeholder="Product Name"
             VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            HorizontalOptions="Center" 
+            WidthRequest="200"/>
         <Button
             Text="Add"
+            WidthRequest="75"
+            Margin="20"
             VerticalOptions="Center" 
             HorizontalOptions="Center"
             Command="{Binding AddItemCommand}"

@@ -9,7 +9,7 @@ namespace Shopping_List.Model
         public string Name { get; set; }
         public bool IsChecked { get; set; }
 
-        void ToggleChecked()
+        public void ToggleChecked()
         {
             IsChecked = !IsChecked;
         }

@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Shopping_List.Model;
 using System.Collections.ObjectModel;
 
@@ -8,6 +9,10 @@ namespace Shopping_List.ViewModel
     {
         public ObservableCollection<ShoppingItemModel> ShoppingItems { get; set; }
 
+        [ObservableProperty]
+        private int checkedCount;
+
+        public double CheckedProgress => ShoppingItems.Count == 0 ? 0 : (double)CheckedCount / ShoppingItems.Count;
         public ListViewModel()
         {
             ShoppingItems = new ObservableCollection<ShoppingItemModel>();
@@ -26,6 +31,16 @@ namespace Shopping_List.ViewModel
         {
             ShoppingItems.Clear();
         }
+
+        [RelayCommand]
+        public void RemoveItem(ShoppingItemModel item)
+        {
+            if (item != null)
+            {
+                ShoppingItems.Remove(item);
+            }
+        }
+
         [RelayCommand]
         public void AddItem(string itemName)
         {
@@ -33,6 +48,20 @@ namespace Shopping_List.ViewModel
             {
                 ShoppingItems.Add(new ShoppingItemModel { Name = itemName, IsChecked = false });
             }
+        }
+        [RelayCommand]
+        public void ToggleItemChecked(ShoppingItemModel item)
+        {
+            if (item != null)
+            {
+                //item.ToggleChecked();
+                UpdateCheckedCount();
+            }
+        }
+        public void UpdateCheckedCount()
+        {
+            CheckedCount = ShoppingItems.Count(item => item.IsChecked);
+            OnPropertyChanged(nameof(CheckedProgress));
         }
     }
 }
