@@ -56,11 +56,29 @@ namespace Shopping_List.ViewModel
             }
         }
         [RelayCommand]
-        public void ToggleItemChecked(ShoppingItemModel item)
+        public async Task ToggleItemChecked(ShoppingItemModel item)
         {
             if (item != null)
             {
-                UpdateCheckedCount();
+
+
+                if (item != null)
+                {
+                    // Tworzymy listę posortowaną (referencje te same)
+                    var sorted = ShoppingItems.OrderBy(i => i.IsChecked).ToList();
+
+                    // Przesuwamy elementy w istniejącej kolekcji
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        for (int i = 0; i < sorted.Count; i++)
+                        {
+                            var currentIndex = ShoppingItems.IndexOf(sorted[i]);
+                            if (currentIndex != i)
+                                ShoppingItems.Move(currentIndex, i);
+                        }
+                    });
+                }
+                    UpdateCheckedCount();
             }
         }
 
