@@ -2,6 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using Shopping_List.Model;
 using System.Collections.ObjectModel;
+using System.Text.Json;
+using CommunityToolkit.Maui.Storage;
+using System.Text;
 
 namespace Shopping_List.ViewModel
 {
@@ -57,10 +60,73 @@ namespace Shopping_List.ViewModel
         {
             if (item != null)
             {
-                //item.ToggleChecked();
                 UpdateCheckedCount();
             }
         }
+
+        [RelayCommand]
+        public async Task ExportItems()
+        {
+            string json = JsonSerializer.Serialize(ShoppingItems, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+
+            var result = await FileSaver.Default.SaveAsync("zakupy.json", stream);
+
+            if (!result.IsSuccessful)
+            {
+                await Application.Current.MainPage.DisplayAlertAsync("Błąd", "Nie udało się zapisać pliku", "OK");
+            }
+        }
+        [RelayCommand]
+        public async Task Importitems()
+        {
+
+            try
+            {
+                // Definiujemy własny typ pliku JSON
+                var jsonFileType = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
+        {
+            { DevicePlatform.iOS, new[] { "public.json" } },
+            { DevicePlatform.Android, new[] { "application/json" } },
+            { DevicePlatform.WinUI, new[] { ".json" } },
+            { DevicePlatform.MacCatalyst, new[] { "public.json" } }
+        });
+
+                var result = await FilePicker.Default.PickAsync(new PickOptions
+                {
+                    PickerTitle = "Wybierz plik JSON z listą zakupów",
+                    FileTypes = jsonFileType
+                });
+
+                if (result is null)
+                    return; // użytkownik anulował wybór
+
+                using var stream = await result.OpenReadAsync();
+                using var reader = new StreamReader(stream);
+                string json = await reader.ReadToEndAsync();
+
+                var items = JsonSerializer.Deserialize<List<ShoppingItemModel>>(json);
+
+                if (items != null)
+                {
+                    ShoppingItems.Clear();
+                    foreach (var item in items)
+                        ShoppingItems.Add(item);
+
+                    UpdateCheckedCount();
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlertAsync("Błąd", $"Nie udało się wczytać pliku: {ex.Message}", "OK");
+            }
+        }
+        
+
         public void UpdateCheckedCount()
         {
             CheckedCount = ShoppingItems.Count(item => item.IsChecked);

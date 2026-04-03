@@ -53,6 +53,10 @@
                     <Label Text="{Binding CheckedProgress, StringFormat='{0:P0}'}" FontSize="16" VerticalOptions="Center" Margin="10,0,0,40"></Label>
                 </HorizontalStackLayout>
                 <Button Text="Delete all" Command="{Binding ClearItemsCommand}"></Button>
+                <HorizontalStackLayout HorizontalOptions="Center" Padding="10">
+                    <Button Text="Export" Command="{Binding ExportItemsCommand}"></Button>
+                    <Button Text="Import" Command="{Binding ImportitemsCommand}" Margin="10,0,0,0"></Button>
+                </HorizontalStackLayout>
             </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
