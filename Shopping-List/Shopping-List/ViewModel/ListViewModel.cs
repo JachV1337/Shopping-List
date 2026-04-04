@@ -61,7 +61,6 @@ namespace Shopping_List.ViewModel
             if (item != null)
             {
 
-
                 if (item != null)
                 {
                     // Tworzymy listę posortowaną (referencje te same)
